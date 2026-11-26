@@ -1,0 +1,11 @@
+{
+  "name": "Stethoscope — listen to a machine",
+  "short_name": "Stethoscope",
+  "description": "Record a machine, keep its baseline, and see what changed in the spectrum. Not a medical device, and it does not diagnose.",
+  "start_url": "./index.html", "scope": "./", "display": "standalone",
+  "background_color": "#f6f5f2", "theme_color": "#16202a", "lang": "en-IN",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

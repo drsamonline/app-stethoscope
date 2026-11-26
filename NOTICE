@@ -1,0 +1,35 @@
+NOTICE
+======
+
+Stethoscope — https://github.com/drsamonline/app-stethoscope
+Copyright 2026 Dr Sohil Momin. Licensed under PolyForm Noncommercial 1.0.0 (see LICENSE).
+
+Third-party components
+----------------------
+
+None. Stethoscope has no third-party dependency and no CDN.
+
+Vendored from this project's own kits (same licence, same author), copied verbatim on 26/11/2026:
+
+- web-kit 0.1.0 — docs/play/web-kit.js — the offline shell, storage helpers and PWA registration
+- export-kit 1.0.0 — docs/play/export-kit.js — Blob download, used for the recording export
+
+Neither kit is modified. Neither makes a network request.
+
+Not a medical device
+---------------------
+
+This app records and compares the sound of a MACHINE — a fan, a pump, a grinder — against its own baseline.
+It is not a medical device, it is not a stethoscope in the clinical sense, and it does not diagnose
+anything. A low score means "this sounds different from how it sounded before", nothing more.
+
+The analysis is a small DFT over a 256-sample window folded into eight bands, and a band-by-band comparison
+against the baseline. A peak at a named frequency is a peak in that spectrum, not a claim about what is
+wrong with the machine.
+
+No microphone
+-------------
+
+There is no `getUserMedia`, no `MediaRecorder` and no `AudioContext` in this app: it works on a sample buffer
+the page can hold and a test can check. A microphone would be a second job, and a privacy question the spec
+does not ask for.

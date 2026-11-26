@@ -1,0 +1,6 @@
+{ "name": "app-stethoscope", "version": "1.0.0", "private": true,
+  "description": "Record a machine, keep its baseline, and see what changed in the spectrum. Not a medical device, and it does not diagnose.",
+  "license": "PolyForm-Noncommercial-1.0.0", "author": "Dr Sohil Momin",
+  "scripts": { "test": "node tests/self-tests.js && node tests/page-smoke.js && node tests/ui-tests.js",
+    "test:engine": "node tests/self-tests.js", "test:shape": "node tests/page-smoke.js", "test:ui": "node tests/ui-tests.js" },
+  "devDependencies": { "jsdom": "^24.0.0" } }

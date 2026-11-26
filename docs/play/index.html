@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stethoscope — listen to a machine</title>
+<meta name="description" content="Record a machine, keep its baseline, and see what changed in the spectrum. Not a medical device, and it does not diagnose.">
+<meta name="theme-color" content="#16202a">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  :root{--bg:#f6f5f2;--panel:#fff;--ink:#16202a;--muted:#5c6a75;--line:#d9d6cf;--accent:#1f6b5f;--accent-ink:#fff;
+        --bad:#8f2a2a;--warn:#7a5510;--ok:#1f5f4f;--mono:ui-monospace,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:15px}
+  header.top{border-bottom:1px solid var(--line);background:var(--panel);padding:14px 20px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+  header.top h1{font-size:18px;margin:0}
+  header.top p{margin:0;color:var(--muted);font-size:13px}
+  header.top a{margin-left:auto;color:var(--accent);font-size:13px;text-decoration:none;border-bottom:1px solid currentColor}
+  main{max-width:860px;margin:0 auto;padding:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 6px}
+  .card p.claim{margin:0 0 8px;color:var(--muted);font-size:13px}
+  label.fld{display:block;font-size:11px;color:var(--muted);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.06em}
+  input[type=text]{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:inherit;width:100%}
+  button{font:inherit;font-size:13px;padding:8px 13px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  button.small{padding:4px 9px;font-size:12px}
+  .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  .bar .grow{flex:1}
+  .hint{color:var(--muted);font-size:12px}
+  .status{margin:10px 0;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-size:13px;display:none}
+  .status.show{display:block}
+  .status.bad{border-color:#e3b7b7;background:#fdf3f3;color:#7d1f1f}
+  .status.ok{border-color:#b7d8cd;background:#f2f9f6;color:#14503f}
+  .status.warn{border-color:#e8d5ae;background:#fdf8ee;color:#6b4700}
+  .score{font-family:var(--mono);font-size:40px;font-weight:700;line-height:1.05}
+  ul.list{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:7px}
+  ul.list li{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:9px 11px;background:#fbfaf8;font-size:13px}
+  ul.list li .meta{display:block;font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px}
+  .bars{display:flex;gap:3px;align-items:flex-end;height:90px;margin-top:10px}
+  .bars div{flex:1;background:#7fd1c1;border-radius:3px 3px 0 0;min-height:2px}
+  .bars div.hot{background:#c0563a}
+  .note{margin:10px 0 0;padding:10px 12px;border:1px solid #cfd9e6;border-left:4px solid #2f4a7a;border-radius:8px;background:#f4f7fb;font-size:12.5px;color:#334a63}
+  footer{max-width:860px;margin:0 auto;padding:18px 20px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Stethoscope</h1>
+  <p>Listen to a machine, keep its baseline, and see what changed. It does not diagnose.</p>
+  <a href="../index.html">about</a>
+</header>
+
+<main>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+  <p class="note" id="disclaimer"></p>
+
+  <section class="card">
+    <h2>Record a machine</h2>
+    <p class="claim">There is no microphone here: the app works on a sample buffer it can hold and test. Pick a machine and record what it sounds like.</p>
+    <div class="bar" style="margin-top:0">
+      <div style="flex:2"><label class="fld" for="machine">Machine</label><input type="text" id="machine" value="the fan"></div>
+      <button class="primary" type="button" id="recBtn" style="margin-top:16px">Record a sample</button>
+      <button type="button" id="grindBtn" style="margin-top:16px">Record one with a grinding tone</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Against the baseline</h2>
+    <div class="score" id="scoreNum"></div>
+    <div class="hint" id="scoreSays"></div>
+    <div class="bars" id="bars"></div>
+    <ul class="list" id="findingList"></ul>
+  </section>
+
+  <section class="card">
+    <h2>The trend</h2>
+    <div class="hint" id="trendSays"></div>
+    <ul class="list" id="trendList"></ul>
+  </section>
+
+  <div class="bar">
+    <button type="button" class="small" id="exportBtn">Export the recordings</button>
+    <span class="hint" id="ioNote"></span>
+  </div>
+
+  <footer>
+    Stethoscope compares a machine's recording with its own baseline and names the band that stands out. It is not a medical device, it does not diagnose
+    anything, and a low score is not a verdict on the machine.
+    <br>PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin ·
+    <a href="https://github.com/drsamonline/app-stethoscope/releases/tag/app-latest">Windows, Android and Linux builds</a>
+  </footer>
+</main>
+
+<script src="web-kit.js"></script>
+<script src="export-kit.js"></script>
+<script src="stethoscope-core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
