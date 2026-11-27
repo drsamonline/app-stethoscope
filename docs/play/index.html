@@ -44,6 +44,26 @@
   .note{margin:10px 0 0;padding:10px 12px;border:1px solid #cfd9e6;border-left:4px solid #2f4a7a;border-radius:8px;background:#f4f7fb;font-size:12.5px;color:#334a63}
   footer{max-width:860px;margin:0 auto;padding:18px 20px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
   [hidden]{display:none !important}
+
+  body{background:#0a1013;color:#cfe0e6;font-family:ui-monospace,Menlo,Consolas,monospace}
+  header.top{background:#0f181c;border-bottom:1px solid #1c2b31}
+  header.top h1{color:#eaf6f8}
+  header.top p,header.top a{color:#6f8792}
+  main{max-width:1200px}
+  .card{background:#0f181c;border:1px solid #1c2b31;border-radius:2px}
+  .card h2{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d7a94b}
+  .card p.claim{color:#6f8792}
+  button{background:#0f181c;border-color:#1c2b31;color:#cfe0e6;border-radius:2px}
+  button.primary{background:#57c9c0;border-color:#57c9c0;color:#0a1013;font-weight:600}
+  input[type=text]{background:#0a1013;border-color:#1c2b31;color:#cfe0e6;border-radius:2px}
+  .bars div{background:#1f3a3d}
+  .bars div.hot{background:#c05a4a}
+  ul.list li{background:#0a1013;border-color:#1c2b31;border-left-color:#57c9c0;color:#cfe0e6;border-radius:2px}
+  .note{background:#0f1a1f;border-color:#1c2b31;border-left-color:#57c9c0;color:#9dc4d2}
+  .status.ok{border-color:#2c4a56;background:#0f1a1f;color:#9dc4d2}
+  .status.bad{border-color:#5a2c2c;background:#1a0f0f;color:#e0a3a3}
+  .sponsor{margin:22px 0 0;border:1px solid #1c2b31;border-left:3px solid #d7a94b;background:#0f181c;padding:12px 14px;font-size:11.5px;color:#6f8792;line-height:1.6}
+  .sponsor a{color:#d7a94b;text-decoration:none;border-bottom:1px solid currentColor}
 </style>
 </head>
 <body>
@@ -87,6 +107,10 @@
     <span class="hint" id="ioNote"></span>
   </div>
 
+  <div class="sponsor">
+    <strong>Sponsor this app.</strong> Free, offline, no account. If it earned its keep:
+    <a href="https://github.com/sponsors/drsamonline">github.com/sponsors/drsamonline</a>
+  </div>
   <footer>
     Stethoscope compares a machine's recording with its own baseline and names the band that stands out. It is not a medical device, it does not diagnose
     anything, and a low score is not a verdict on the machine.
